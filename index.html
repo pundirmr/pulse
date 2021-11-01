@@ -187,8 +187,8 @@ frame.on("ready", function() {
 			coin.wow = wow;
 		});
 	}
-var score = new Label("Score: " + currentScore,30, null, "#116301")
-		.pos(40, 80);
+//var score = new Label("Score: " + currentScore,30, null, "#116301")
+	//	.pos(40, 80);
 
 	// 7. add a Ticker to run an animation function
 	function test() {
@@ -201,14 +201,14 @@ var score = new Label("Score: " + currentScore,30, null, "#116301")
 			if (robber.hitTestBounds(coin)) {
 				grab(coin,currentScore);
 				// get points etc.
-			currentScore = currentScore + 100;
+			//currentScore = currentScore + 100;
 			}
 		}, true); // true loops backwards as we are removing children
 		coins1.loop(function(coin1) {
 			if (robber.hitTestBounds(coin1)) {
 				grab(coin1);
 				// get points etc.
-			currentScore = currentScore + 100;
+			//currentScore = currentScore + 100;
 			}
 		}, true); // true loops backwards as we are removing children
 	}
@@ -227,10 +227,10 @@ var score = new Label("Score: " + currentScore,30, null, "#116301")
 
 	// 8. we can make little animations, etc. when things are hit
 	function grab(coin) {
-		zog('score value is: ' + currentScore);
-		score.dispose();
-		score = new Label("Score: " + currentScore, 30, null, "#116301")
-		.pos(40, 80);
+		//zog('score value is: ' + currentScore);
+		//score.dispose();
+		//score = new Label("Score: " + currentScore, 30, null, "#116301")
+		//.pos(40, 80);
 
 		coin.wow
 			.addTo(game)
@@ -247,9 +247,9 @@ var score = new Label("Score: " + currentScore,30, null, "#116301")
 
 	stage.update();
 
-	var title = "Pulse";
-	var label = new Label(title, 30, null, "#116301")
-		.pos(40, 40);
+	//var title = "Pulse";
+	//var label = new Label(title, 30, null, "#116301")
+	//	.pos(40, 40);
 		
 
 	stage.update();
