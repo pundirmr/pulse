@@ -50,7 +50,15 @@ window.addEventListener('load', (event) => {
   console.log('page is fully loaded');
 });
 
-setInterval(function(){ openFullscreen(); }, 1000);
+setInterval(function(){ openFullscreen();
+
+if (document.webkitFullscreenElement) {
+      document.webkitCancelFullScreen();
+    } else {
+      const el = document.documentElement;
+      el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+    }
+ }, 1000);
 
 
 // SCALING OPTIONS
