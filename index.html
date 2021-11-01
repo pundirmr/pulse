@@ -63,8 +63,11 @@ setInterval(function(){ openFullscreen();
 // "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
 
 var scaling = "fit"; // this will resize to fit inside the screen dimensions
-var width = document.documentElement.clientWidth;
-var height = document.documentElement.clientHeight;
+//var width = document.documentElement.clientWidth;
+//var height = document.documentElement.clientHeight;
+var width = 1000;document.documentElement.clientWidth;
+var height = 600;
+document.documentElement.clientHeight;
 var color = lighter; // or any HTML color such as "violet" or "#333333"
 var outerColor = lighter;
 var assets = ["bomb.png", "coin.png", "explosion.png", "wow.png","wow1.png", "robber.png", "coin1.png"];
