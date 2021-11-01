@@ -65,7 +65,7 @@ var width = document.documentElement.clientWidth;
 var height = document.documentElement.clientHeight;
 var color = lighter; // or any HTML color such as "violet" or "#333333"
 var outerColor = lighter;
-var assets = ["bomb.png", "coin.png", "explosion.png", "wow.png", "robber.png", "coin1.png"];
+var assets = ["bomb.png", "coin.png", "explosion.png", "wow.png","wow1.png", "robber.png", "coin1.png"];
 var path = "";
 	var currentScore = 0;
 
@@ -102,7 +102,7 @@ frame.on("ready", function() {
 	new MotionController({
 		target:robber,
 		type:controllerTypes[5], // default
-		speed:400, // default
+		speed:600, // default
 		damp:1.55, // default
 		axis:"horizontal",
 		boundary:new Boundary(robber.width/2,backing.y + backing.height, backing.width-robber.width, 0),
@@ -161,7 +161,7 @@ frame.on("ready", function() {
 					ease:"linear",
 					call:remove
 				});
-			var wow = asset("wow.png").clone().centerReg({add:false}); // do not add
+			var wow = asset("wow1.png").clone().centerReg({add:false}); // do not add
 			coin1.wow = wow;
 		});
 	}
