@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+<head>
+
+<!-- <button onclick="openFullscreen();">Open Fullscreen</button>
+<button onclick="closeFullscreen();">Close Fullscreen</button>
+-->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GSHN2BZVKW"></script>
+<script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-GSHN2BZVKW');</script>
+<meta charset="utf-8" />
+<title>Pulse</title>
+
+<!-- Welcome to ZIM at https://zimjs.com - Code Creativity!              	        -->
+<!-- ZIM runs on the HTML Canvas powered by JavaScript and CreateJS https://createjs.com -->
+<!-- Founded by Inventor Dan Zen - http://danzen.com - Canadian New Media Award Winner 	-->
+<!-- ZIM is free to use. You can donate to help improve ZIM at http://zimjs.com/donate 	-->
+
+<script src="scripts/cdn/1.3.2/createjs.js"></script>
+<script src="scripts/cdn/cat/00/zim.js"></script>
+<!-- use zimjs.com/distill for minified individual functions! -->
+
+
+<script>
+	/* Get the documentElement (<html>) to display the page in fullscreen */
+var elem = document.documentElement;
+
+/* View in fullscreen */
+function openFullscreen() {
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) { /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+
+/* Close fullscreen */
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) { /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) { /* IE11 */
+    document.msExitFullscreen();
+  }
+}
+
+window.addEventListener('load', (event) => {
+  console.log('page is fully loaded');
+});
+
+setInterval(function(){ openFullscreen(); }, 1000);
+
+
+// SCALING OPTIONS
+// scaling can have values as follows with full being the default
+// "fit"	sets canvas and stage to dimensions and scales to fit inside window size
+// "outside"	sets canvas and stage to dimensions and scales to fit outside window size
+// "full"	sets stage to window size with no scaling
+// "tagID"	add canvas to HTML tag of ID - set to dimensions if provided - no scaling
+
+var scaling = "fit"; // this will resize to fit inside the screen dimensions
+var width = document.documentElement.clientWidth;
+var height = document.documentElement.clientHeight;
+var color = lighter; // or any HTML color such as "violet" or "#333333"
+var outerColor = lighter;
+var assets = ["bomb.png", "coin.png", "explosion.png", "wow.png", "robber.png", "coin1.png"];
+var path = "";
+	var currentScore = 0;
+
+
+var frame = new Frame(scaling, width, height, color, outerColor, assets, path,currentScore);
+frame.on("ready", function() {
+	zog("ready from ZIM Frame");
+
+	var stage = frame.stage;
+	var stageW = frame.width;
+	var stageH = frame.height;
+
+
+	// STEPS
+	// 1. create a backing that can be used as a mask (or just go full screen)
+	var backing = new Rectangle(stageW-80, stageH-250, "#343331")
+		.center()
+		.mov(0,20);
+		
+
+
+	// 2. create a container for the game (or just use the stage)
+	var game = new Container(backing.width, backing.height)
+		.loc(backing)
+		.setMask(backing);
+
+	// 3. create a person to dodge and catch items and position at the bottom
+	var robber = asset("robber.png")
+		.centerReg()
+		.pos(0,0,CENTER,BOTTOM,game);
+
+	// 4. move the player with a MotionController
+	var controllerTypes = ["mousedown", "mousemove", "keydown", "gamebutton", "gamestick", "swipe"]
+	new MotionController({
+		target:robber,
+		type:controllerTypes[5], // default
+		speed:250, // default
+		damp:0.45, // default
+		axis:"horizontal",
+		boundary:new Boundary(robber.width/2,backing.y + backing.height, backing.width-robber.width, 0),
+		container:game
+	});
+
+	// 5. optionally start the game when the user moves their mouse or swipes
+	stage.on("stagemousemove", startGame, null, true); // only once
+	function startGame() {
+
+		// 6. create and animate objects to drop
+		dropBombs();
+		dropCoins();
+		dropCoins1();
+		
+		// 7. add a Ticker to run an animation function
+		Ticker.add(test);
+	}
+
+	// 6. create and animate objects to drop
+	// BOMBS
+	var bombs = new Container().addTo(game);
+	function dropBombs() {
+		interval([.8, 1.9], function() {
+			var bomb = asset("bomb.png")
+				.clone()
+				.centerReg()
+				.loc(rand(0, game.width), 50, bombs)
+				.animate({
+					props:{y:backing.height-20},
+					time:2,
+					ease:"linear",
+					call:function (target) {
+						explode(target);
+						remove(target);
+					}
+				});
+			var explosion = asset("explosion.png").clone().centerReg({add:false}); // do not add
+			bomb.explosion = explosion;
+		});
+	}
+	
+	
+		// 6. create and animate objects to drop
+	// COINS
+	var coins1 = new Container().addTo(game);
+	function dropCoins1() {
+		interval([1.7, 1.5], function() {
+			var coin1 = asset("coin1.png")
+				.clone()
+				.centerReg()
+				.loc(rand(0, game.width), -30, coins)
+				.animate({
+					props:{y:stageH},
+					time:3,
+					ease:"linear",
+					call:remove
+				});
+			var wow = asset("wow.png").clone().centerReg({add:false}); // do not add
+			coin1.wow = wow;
+		});
+	}
+
+
+
+	// 6. create and animate objects to drop
+	// COINS
+	var coins = new Container().addTo(game);
+	function dropCoins() {
+		interval([2.8, 1.5], function() {
+			var coin = asset("coin.png")
+				.clone()
+				.centerReg()
+				.loc(rand(0, game.width), -30, coins)
+				.animate({
+					props:{y:stageH},
+					time:3,
+					ease:"linear",
+					call:remove
+				});
+			var wow = asset("wow.png").clone().centerReg({add:false}); // do not add
+			coin.wow = wow;
+		});
+	}
+var score = new Label("Score: " + currentScore,30, null, "#116301")
+		.pos(40, 80);
+
+	// 7. add a Ticker to run an animation function
+	function test() {
+		bombs.loop(function(bomb) {
+			if (robber.hitTestBounds(bomb)) {
+				explode(bomb);
+			}
+		}, true); // true loops backwards as we are removing children
+		coins.loop(function(coin) {
+			if (robber.hitTestBounds(coin)) {
+				grab(coin,currentScore);
+				// get points etc.
+			currentScore = currentScore + 100;
+			}
+		}, true); // true loops backwards as we are removing children
+		coins1.loop(function(coin1) {
+			if (robber.hitTestBounds(coin1)) {
+				grab(coin1);
+				// get points etc.
+			currentScore = currentScore + 100;
+			}
+		}, true); // true loops backwards as we are removing children
+	}
+
+	// 8. we can make little animations, etc. when things are hit
+	function explode(bomb) {
+		var explosion = bomb.explosion;
+		if (explosion) {
+			explosion
+				.loc(bomb)
+				.animate({alpha:0}, .1, null, remove, null, .1); // last param is wait
+		}
+		remove(bomb);
+	}
+
+
+	// 8. we can make little animations, etc. when things are hit
+	function grab(coin) {
+		zog('score value is: ' + currentScore);
+		score.dispose();
+		score = new Label("Score: " + currentScore, 30, null, "#116301")
+		.pos(40, 80);
+
+		coin.wow
+			.addTo(game)
+			.loc(robber)
+			.mov(0,-130)
+			.animate({alpha:0}, .1, null, remove, null, .1); // last param is wait;
+		remove(coin);
+	}
+
+	function remove(obj) {
+		obj.removeFrom();
+		obj = null;
+	}
+
+	stage.update();
+
+	var title = "Pulse";
+	var label = new Label(title, 30, null, "#116301")
+		.pos(40, 40);
+		
+
+	stage.update();
+	
+
+}); // end of ready
+
+</script>
+
+<meta name="viewport" content="width=device-width, user-scalable=no" />
+
+</head>
+
+<body>
+<!-- canvas with id="myCanvas" is made by zim Frame -->
+
+<script>
+var r=Math.round(Math.random()*1000000);
+document.write('<img src=/cgi-bin/traffic_plus?company=danzen&page=zimBitsFallingV&r='+r+' width=1 height=1>');
+</script>
+</body>
+
+<!-- Mirrored from zimjs.com/bits/view/falling.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 01 Nov 2021 18:07:35 GMT -->
+</html>
+<!-- https://zimjs.com/docs.html?items=Frame,Container,Rectangle,Label,hitTestBounds,move,MotionController,animate,loop,pos,mov,reg,addTo,removeFrom,center,setMask,loop,interval,zog,Ticker#controls
+-->
