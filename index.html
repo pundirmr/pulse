@@ -102,8 +102,8 @@ frame.on("ready", function() {
 	new MotionController({
 		target:robber,
 		type:controllerTypes[5], // default
-		speed:250, // default
-		damp:0.45, // default
+		speed:400, // default
+		damp:0.75, // default
 		axis:"horizontal",
 		boundary:new Boundary(robber.width/2,backing.y + backing.height, backing.width-robber.width, 0),
 		container:game
