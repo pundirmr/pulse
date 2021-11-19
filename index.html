@@ -5,6 +5,7 @@
 <!-- <button onclick="openFullscreen();">Open Fullscreen</button>
 <button onclick="closeFullscreen();">Close Fullscreen</button>
 -->
+<button onclick="onShare();">Share</button>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GSHN2BZVKW"></script>
 <script>window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'G-GSHN2BZVKW');</script>
 <meta charset="utf-8" />
@@ -44,6 +45,24 @@ function closeFullscreen() {
   } else if (document.msExitFullscreen) { /* IE11 */
     document.msExitFullscreen();
   }
+}
+
+function onShare(){
+    const title = 'Title';
+    const url = 'https://www.facebook.com/';
+    const text = "Share on native app if installed";
+    if (navigator.share) {
+      navigator
+        .share({ title: `${title}`, url: `${url}`,text: `${text}`})
+        .then(() => {
+          console.log('Thanks for sharing!');
+        })
+        .catch(console.error);
+    } else {
+      window.location.replace(
+        `https://www.facebook.com/sharer.php?u=${url.trim()}&quote=${text}`
+      );
+    }
 }
 
 window.addEventListener('load', (event) => {
