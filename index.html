@@ -25,6 +25,17 @@
 	/* Get the documentElement (<html>) to display the page in fullscreen */
 var elem = document.documentElement;
 
+function getUrlParams(url) {
+  var params = {};
+  (url + '?').split('?')[1].split('&').forEach(function (pair) {
+    pair = (pair + '=').split('=').map(decodeURIComponent);
+    if (pair[0].length) {
+      params[pair[0]] = pair[1];
+    }
+  });
+  return params;
+};
+
 /* View in fullscreen */
 function openFullscreen() {
   if (elem.requestFullscreen) {
@@ -49,7 +60,7 @@ function closeFullscreen() {
 
 function onShare(){
     const title = 'Title';
-    const url = 'https://www.facebook.com/';
+    const url = 'https://pundirmr.github.io/pulseScore/';
     const text = "Share on native app if installed";
     if (navigator.share) {
       navigator
@@ -60,7 +71,7 @@ function onShare(){
         .catch(console.error);
     } else {
       window.location.replace(
-        `https://www.facebook.com/sharer.php?u=${url.trim()}&quote=${text}`
+        `https://pundirmr.github.io/pulseScore/`
       );
     }
 }
